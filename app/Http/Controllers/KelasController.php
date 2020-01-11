@@ -74,9 +74,13 @@ class KelasController extends Controller
      * @param  \App\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Kelas $kelas)
+    public function update(Request $request, Kelas $kelas, $id)
     {
-        //
+        $data = $kelas->findOrFail($id);
+        $data->kode_kelas = $request->kode_kelas;
+        if ($data->save()) {
+            return redirect()->route('kelas.index');
+        }
     }
 
     /**
@@ -85,8 +89,11 @@ class KelasController extends Controller
      * @param  \App\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Kelas $kelas)
+    public function destroy(Kelas $kelas, $id)
     {
-        //
+        if ($kelas->destroy($id)) {
+            return 1;
+        }
+        return 0;
     }
 }

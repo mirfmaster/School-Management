@@ -6,10 +6,9 @@
 @section('content')
 <?php
 $action = route('kelas.store');
-if ($data->exists()) {
+if ($data->id) {
     $action = route('kelas.update', $data->id);
 }
-// dd();
 ?>
 <div class="content">
     @if (session('status'))
@@ -26,7 +25,9 @@ if ($data->exists()) {
         <div class="col-md-12">
             <form class="col-md-12" action="{{ $action }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <!-- @method('PUT') -->
+                @if($data->id)
+                @method('PUT')
+                @endif
                 <div class="card">
                     <div class="card-header">
                         <h5 class="title">Form Kelas</h5>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Kelas;
 use App\Murid;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,13 @@ class MuridController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $data = Murid::with('kelas')->whereHas('kelas', function ($q) use ($id) {
+            return $q->where('id', $id);
+        })->get();
+
+        return view("murid.index", compact(['data', 'id']));
     }
 
     /**
@@ -22,9 +27,11 @@ class MuridController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $data = new Murid;
+        $kelas = Kelas::all();
+        return view("murid.form", compact(['id', 'data', 'kelas']));
     }
 
     /**
@@ -35,7 +42,19 @@ class MuridController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new Murid;
+        $data->kelas_id = $request->kelas_id;
+        $data->nis = $request->nis;
+        $data->nama = $request->nama;
+        $data->alamat = $request->alamat;
+        $data->jk = $request->jk;
+        try {
+            $data->save();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "NIS Harus Unique");
+        }
+
+        return redirect()->route('murid.index', $request->kelas_id);
     }
 
     /**
@@ -55,9 +74,13 @@ class MuridController extends Controller
      * @param  \App\Murid  $murid
      * @return \Illuminate\Http\Response
      */
-    public function edit(Murid $murid)
+    public function edit($id)
     {
-        //
+        $data = Murid::findOrFail($id);
+        $kelas = Kelas::all();
+        $id = $data->kelas_id;
+
+        return view("murid.form", compact(['id', 'data', 'kelas']));
     }
 
     /**
@@ -67,9 +90,21 @@ class MuridController extends Controller
      * @param  \App\Murid  $murid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Murid $murid)
+    public function update(Request $request, $id)
     {
-        //
+        $data = Murid::findOrFail($id);
+        $data->kelas_id = $request->kelas_id;
+        $data->nis = $request->nis;
+        $data->nama = $request->nama;
+        $data->alamat = $request->alamat;
+        $data->jk = $request->jk;
+        try {
+            $data->save();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "NIS Harus Unique");
+        }
+
+        return redirect()->route('murid.index', $request->kelas_id);
     }
 
     /**
@@ -78,8 +113,11 @@ class MuridController extends Controller
      * @param  \App\Murid  $murid
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Murid $murid)
+    public function destroy($id)
     {
-        //
+        if (Murid::destroy($id)) {
+            return 1;
+        }
+        return 0;
     }
 }

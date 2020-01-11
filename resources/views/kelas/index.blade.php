@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col-5 col-md-4">
                             <div class="icon-big text-center icon-warning">
-                                <i class="nc-icon nc-vector text-danger"></i>
+                                <i class="nc-icon nc-mobile text-danger"></i>
                             </div>
                             {{ $kelas->kode_kelas }}
                         </div>
@@ -35,15 +35,17 @@
                     <hr>
                     <div class="stats">
                         <div class="row flex-row justify-around">
-                            <button type="submit" class="btn disflex" style="padding: 5px 6px;font-size:1.7rem">
-                                <i class="nc-icon nc-badge text-info"></i>
-                            </button>
+                            <a href="{{route('murid.index', $kelas->id) }}">
+                                <button type="submit" class="btn disflex" style="padding: 5px 6px;font-size:1.7rem">
+                                    <i class="nc-icon nc-badge text-info"></i>
+                                </button>
+                            </a>
                             <a href="{{ route('kelas.edit', $kelas->id) }}">
                                 <button type="submit" class="btn disflex" style="padding: 5px 6px;font-size:1.7rem">
                                     <i class="nc-icon nc-settings text-warning"></i>
                                 </button>
                             </a>
-                            <button type="submit" class="btn disflex" style="padding: 5px 6px;font-size:1.7rem">
+                            <button type="submit" class="btn disflex" style="padding: 5px 6px;font-size:1.7rem" onclick="del(`{{ url('kelas') }}`, {{$kelas->id}} )">
                                 <i class="nc-icon nc-simple-remove text-danger"></i>
                             </button>
                         </div>
@@ -129,12 +131,3 @@
         </div> -->
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    $(document).ready(function() {
-        // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
-        demo.initChartsPages();
-    });
-</script>
-@endpush

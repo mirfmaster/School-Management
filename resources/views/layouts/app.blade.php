@@ -20,13 +20,13 @@
     <link href="{{ asset('paper') }}/css/paper-dashboard.css?v=2.0.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{{ asset('paper') }}/demo/demo.css" rel="stylesheet" />
+    <link href="{{ asset('vendor') }}/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
 
 </head>
 
 <body class="{{ $class }}">
     @auth()
     @include('layouts.page_templates.auth')
-    @include('layouts.navbars.fixed-plugin')
     @endauth
 
     @guest
@@ -38,8 +38,6 @@
     <script src="{{ asset('paper') }}/js/core/popper.min.js"></script>
     <script src="{{ asset('paper') }}/js/core/bootstrap.min.js"></script>
     <script src="{{ asset('paper') }}/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <!--  Google Maps Plugin    -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
     <!-- Chart JS -->
     <script src="{{ asset('paper') }}/js/plugins/chartjs.min.js"></script>
     <!--  Notifications Plugin    -->
@@ -48,9 +46,47 @@
     <script src="{{ asset('paper') }}/js/paper-dashboard.min.js?v=2.0.0" type="text/javascript"></script>
     <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
     <script src="{{ asset('paper') }}/demo/demo.js"></script>
-    <!-- Sharrre libray -->
-    <script src="../assets/demo/jquery.sharrre.js"></script>
+    <script src="{{ asset('vendor') }}/sweetalert2/dist/sweetalert2.min.js"></script>
+    <script>
+        const del = (url, id) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    return $.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            _method: "DELETE"
+                        },
+                        url: url + "/" + id,
+                        success: function(data) {
+                            return data
+                        },
+                        error: function(data) {
+                            console.log(data);
+                        }
+                    });
 
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.value) {
+                    Swal.fire({
+                        title: `Data berhasil dihapus!`,
+                        icon: "success"
+                    }).then(() => location.reload())
+                }
+            })
+        }
+    </script>
     @stack('scripts')
 </body>
 
