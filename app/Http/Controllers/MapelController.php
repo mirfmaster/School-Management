@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Mapel;
+use App\Murid;
+use App\Ujian;
 use Illuminate\Http\Request;
 
 class MapelController extends Controller
@@ -14,7 +16,9 @@ class MapelController extends Controller
      */
     public function index()
     {
-        //
+        $data = Mapel::all();
+
+        return view("mapel.index", compact(['data']));
     }
 
     /**
@@ -24,7 +28,8 @@ class MapelController extends Controller
      */
     public function create()
     {
-        //
+        $data = new Mapel;
+        return view("mapel.form", compact(['data']));
     }
 
     /**
@@ -35,7 +40,27 @@ class MapelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new Mapel;
+        $data->nama_mapel = $request->nama_mapel;
+        $data->kkm = $request->kkm;
+        try {
+            $data->save();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", "Terjadi error");
+        }
+
+        $murids = Murid::all();
+        foreach ($murids as $murid) {
+            $ujian = new Ujian;
+            $ujian->murid_id = $murid->id;
+            $ujian->kelas_id = $murid->kelas_id;
+            $ujian->mapel_id = $data->id;
+            $ujian->semester1 = 0;
+            $ujian->semester2 = 0;
+            $ujian->save();
+        }
+
+        return redirect()->route('mapel.index');
     }
 
     /**
@@ -55,9 +80,24 @@ class MapelController extends Controller
      * @param  \App\Mapel  $mapel
      * @return \Illuminate\Http\Response
      */
-    public function edit(Mapel $mapel)
+    public function edit($id)
     {
-        //
+        $data = Mapel::findOrFail($id);
+
+        // $murids = Murid::all();
+        // foreach ($murids as $murid) {
+        //     $ujianExist = Ujian::where(['murid_id' => $murid->id])->count();
+        //     if ($ujianExist == 0) {
+        //         $ujian = new Ujian;
+        //         $ujian->murid_id = $murid->id;
+        //         $ujian->mapel_id = $data->id;
+        //         $ujian->semester1 = 0;
+        //         $ujian->semester2 = 0;
+        //         $ujian->save();
+        //     }
+        // }
+
+        return view("mapel.form", compact(['data']));
     }
 
     /**
@@ -67,9 +107,14 @@ class MapelController extends Controller
      * @param  \App\Mapel  $mapel
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Mapel $mapel)
+    public function update(Request $request, $id)
     {
-        //
+        $data = Mapel::findOrFail($id);
+        $data->nama_mapel = $request->nama_mapel;
+        $data->kkm = $request->kkm;
+        $data->save();
+
+        return redirect()->route('mapel.index');
     }
 
     /**
@@ -78,8 +123,11 @@ class MapelController extends Controller
      * @param  \App\Mapel  $mapel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Mapel $mapel)
+    public function destroy($id)
     {
-        //
+        if (Mapel::destroy($id)) {
+            return 1;
+        }
+        return 0;
     }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Kelas;
 use App\Murid;
+use App\Ujian;
+use App\Mapel;
 use Illuminate\Http\Request;
 
 class MuridController extends Controller
@@ -52,6 +54,17 @@ class MuridController extends Controller
             $data->save();
         } catch (\Throwable $th) {
             return redirect()->back()->with("error", "NIS Harus Unique");
+        }
+
+        $mapels = Mapel::all();
+        foreach ($mapels as $mapel) {
+            $ujian = new Ujian;
+            $ujian->mapel_id = $mapel->id;
+            $ujian->kelas_id = $data->kelas_id;
+            $ujian->murid_id = $data->id;
+            $ujian->semester1 = 0;
+            $ujian->semester2 = 0;
+            $ujian->save();
         }
 
         return redirect()->route('murid.index', $request->kelas_id);

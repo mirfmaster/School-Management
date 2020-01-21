@@ -21,6 +21,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::resource('kelas', 'KelasController', ['except' => ['show']]);
+	Route::resource('mapel', 'MapelController', ['except' => ['show']]);
+	Route::resource('ujian', 'UjianController', ['except' => ['show', 'index']]);
+	Route::get('ujian/{kelas_id}/mapel', ['as' => 'ujian.mapel', 'uses' => 'UjianController@mapel']);
+	Route::get('ujian/{kelas_id}/mapel/{mapel_id}', ['as' => 'ujian.index', 'uses' => 'UjianController@index']);
+	Route::get('rapot/{kelas_id}/murid/{mapel_id}', ['as' => 'ujian.rapot', 'uses' => 'UjianController@rapot']);
 	Route::get('murid/create/{id}', ['as' => 'murid.create', 'uses' => 'MuridController@create']);
 	Route::get('murid/{id}', ['as' => 'murid.index', 'uses' => 'MuridController@index']);
 	Route::resource('murid', 'MuridController', ['except' => ['show', 'index']]);

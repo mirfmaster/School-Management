@@ -49,6 +49,13 @@
                                 <i class="nc-icon nc-simple-remove text-danger"></i>
                             </button>
                         </div>
+                        <div class="row flex-row justify-around" style="margin-top:10px">
+                            <a href="{{url('ujian/'. $kelas->id .'/mapel') }}">
+                                <button type="submit" class="btn disflex">
+                                    NILAI
+                                </button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
