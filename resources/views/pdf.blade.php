@@ -2,7 +2,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Invoice</title>
+  <title>Rapot Siswa</title>
 
 <body>
   <style type="text/css">
@@ -59,30 +59,35 @@
       font-size: 10px;
       font-family: "Arial", Helvetica, sans-serif !important;
     }
+
+    .page-break {
+      page-break-after: always;
+    }
   </style>
 
+  @foreach($data as $murid)
   <div style="font-family:Arial; font-size:12px;">
     <center>
       <table style="max-width:400px;margin:0 auto">
         <tr>
           <td>Nama</td>
           <td>:</td>
-          <td>Muhamad</td>
+          <td>{{$murid->nama}}</td>
         </tr>
         <tr>
           <td>Kelas</td>
           <td>:</td>
-          <td>A3</td>
+          <td>{{$murid->kelas->kode_kelas}}</td>
         </tr>
         <tr>
           <td>Alamat</td>
           <td>:</td>
-          <td>Test</td>
+          <td>{{$murid->alamat}}</td>
         </tr>
         <tr>
-          <td>a</td>
-          <td>a</td>
-          <td>a</td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       </table>
     </center>
@@ -102,19 +107,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+      @php($no = 1)
+      @foreach($murid->ujians as $ujian)
+      <tr align="center">
+        <td>{{ $no }}</td>
+        <td>{{ $ujian->mapel->nama_mapel }}</td>
+        <td>{{ $ujian->mapel->kkm }}</td>
+        <td>{{ $ujian->semester1 }}</td>
+        <td>{{ $ujian->semester2 }}</td>
       </tr>
+      @php($no++)
+      @endforeach
     </tbody>
   </table>
-  <div style="position: absolute; bottom: 5px;font-size:12px">
-    PT Super Respati Jakarta <br>
-    Jl. Bandengan Utara Dalam Kampung Batu Kubur Koja No. 16 Kota Jakarta
-  </div>
+  <div class="page-break"></div>
+  @endforeach
 </body>
 </head>
 

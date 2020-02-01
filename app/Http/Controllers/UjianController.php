@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mapel;
+use App\Murid;
 use App\Ujian;
 use PDF;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class UjianController extends Controller
      */
     public function index($kelas_id, $mapel_id)
     {
-        $data = Ujian::where('kelas_id', $kelas_id)->with(['kelas', 'murid', 'mapel'])->get();
+        $data = Ujian::where('kelas_id', $kelas_id)->where('mapel_id', $mapel_id)->with(['kelas', 'murid', 'mapel'])->get();
 
         return view("ujian.index", compact([
             'data', 'kelas_id', 'mapel_id'
@@ -71,7 +72,8 @@ class UjianController extends Controller
      */
     public function update(Request $request, $kelas_id)
     {
-        $data = Ujian::where('kelas_id', $kelas_id)->get();
+        $data = Ujian::where('kelas_id', $kelas_id)->where('mapel_id', $request->mapel_id)->get();
+        // dd($data, $request->all());
         foreach ($data as $key => $val) {
             $val->semester1 = $request->semester1[$key];
             $val->semester2 = $request->semester2[$key];
@@ -86,15 +88,12 @@ class UjianController extends Controller
      * @param  \App\Ujian  $ujian
      * @return \Illuminate\Http\Response
      */
-    public function rapot($kelas_id, $murid_id)
+    public function rapot($kelas_id)
     {
 
-        // $reports=Product::whereNotNull('out')->get();
-        // $date=$request->date;
-        // if (isset($date)) {
-        //     $reports=Product::whereDate('created_at',$date)->whereNotNull('out')->get();
-        // }  
-        $pdf = PDF::loadView('pdf');
+        $data = Murid::where('kelas_id', $kelas_id)->with(['kelas', 'ujians.mapel'])->get();
+
+        $pdf = PDF::loadView('pdf', compact('data'));
         return $pdf->stream('reports.pdf');
     }
 }

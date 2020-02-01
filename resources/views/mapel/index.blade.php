@@ -1,6 +1,6 @@
 @extends('layouts.app', [
 'class' => '',
-'elementActive' => 'kelas'
+'elementActive' => 'mapel'
 ])
 
 @section('content')

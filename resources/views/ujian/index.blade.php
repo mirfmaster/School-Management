@@ -19,6 +19,7 @@
                     <div class="card-header">
                         <h4 class="card-title"> Nilai Ujian </h4>
                         <div class="col">
+                            <input type="hidden" value='{{ $mapel_id }}' name="mapel_id" />
                             <div class="btn btn-warning pull-right" style="font-size: 12px" id="edit" onclick="edit()">Edit</div>
                             <button type="submit" class="btn btn-primary pull-right" style="font-size: 12px; display:none" id="save">Save</button>
                         </div>
@@ -50,8 +51,8 @@
                                             {{ $ujian->mapel->kkm }}
                                         </td>
                                         <?php
-                                        $color1 = $ujian->semester1 > $ujian->mapel->kkm ? "green" : "red";
-                                        $color2 = $ujian->semester2 > $ujian->mapel->kkm ? "green" : "red";
+                                        $color1 = $ujian->semester1 >= $ujian->mapel->kkm ? "green" : "red";
+                                        $color2 = $ujian->semester2 >= $ujian->mapel->kkm ? "green" : "red";
                                         ?>
                                         <td style="color: {{ $color1 }}; text-align: center">
                                             <input type="text" name="semester1[]" type="number" class="form-control" placeholder="Nilai Semester 1" value="{{ $ujian->semester1 }}" style="display:none">

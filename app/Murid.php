@@ -10,4 +10,8 @@ class Murid extends Model
     {
         return $this->belongsTo(Kelas::class);
     }
+    public function ujians()
+    {
+        return $this->hasMany(Ujian::class);
+    }
 }

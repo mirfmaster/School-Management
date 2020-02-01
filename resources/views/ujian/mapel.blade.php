@@ -10,6 +10,11 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title"> Nilai Mata Pelajaran</h4>
+                    <div class="col">
+                        <a href="{{ route('ujian.rapot', $kelas_id) }}">
+                            <div class="btn btn-warning pull-right" style="font-size: 12px">Cetak Raport</div>
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
