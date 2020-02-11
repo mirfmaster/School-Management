@@ -16,11 +16,11 @@ class CreateUjiansTable extends Migration
         Schema::create('ujians', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('kelas_id');
-            $table->foreign('kelas_id')->references('id')->on('kelas');
+            $table->foreign('kelas_id')->references('id')->on('kelas')->onDelete('cascade');;
             $table->unsignedBigInteger('murid_id');
-            $table->foreign('murid_id')->references('id')->on('murids');
+            $table->foreign('murid_id')->references('id')->on('murids')->onDelete('cascade');;
             $table->unsignedBigInteger('mapel_id');
-            $table->foreign('mapel_id')->references('id')->on('mapels');
+            $table->foreign('mapel_id')->references('id')->on('mapels')->onDelete('cascade');;
             $table->string('jenis');
             $table->string('semester1')->nullable();
             $table->string('semester2')->nullable();
